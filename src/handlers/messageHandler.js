@@ -1,15 +1,6 @@
 const https = require("https");
 
-async function doHandleMessage(message, phone_number_id, WHATSAPP_TOKEN) {
-  let from = message.from;
-  let message_body = message.text.body;
-  // console.log(from, message_body);
-  let reply_message = "Ack from AWS lambda: " + message_body;
-  await sendReply(phone_number_id, WHATSAPP_TOKEN, from,
-      reply_message);
-}
-
-export async function handleMessage(event, WHATSAPP_TOKEN) {
+module.exports.handleMessage = async (event, WHATSAPP_TOKEN) => {
   // process POST request (WhatsApp chat messages)
   // https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
   // to learn about WhatsApp text message payload structure
@@ -39,6 +30,15 @@ export async function handleMessage(event, WHATSAPP_TOKEN) {
     }
   }
   return response;
+}
+
+async function doHandleMessage(message, phone_number_id, WHATSAPP_TOKEN) {
+  let from = message.from;
+  let message_body = message.text.body;
+  // console.log(from, message_body);
+  let reply_message = "Ack from AWS lambda: " + message_body;
+  await sendReply(phone_number_id, WHATSAPP_TOKEN, from,
+      reply_message);
 }
 
 const sendReply = (phone_number_id, whatsapp_token, to, reply_message) => {

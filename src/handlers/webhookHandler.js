@@ -1,4 +1,5 @@
-export function webhookVerification(event, VERIFY_TOKEN) {
+
+module.exports.webhookVerification = (event, VERIFY_TOKEN) => {
   // https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests
   // to learn more about GET request for webhook verification
   let queryParams = event?.queryStringParameters;
