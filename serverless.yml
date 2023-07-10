@@ -28,7 +28,7 @@ provider:
 
 functions:
   hello:
-    handler: src/handler.hello
+    handler: src/main.hello
     timeout: 60 #seconds
     memorySize: 128 #mb
     url: true
