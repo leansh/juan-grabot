@@ -23,10 +23,8 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs16.x
-
-# you can overwrite defaults here
- stage: dev
- region: us-east-1
+  stage: dev
+  region: us-east-1
 
 functions:
   hello:
