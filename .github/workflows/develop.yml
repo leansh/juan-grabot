@@ -3,7 +3,6 @@ name: Deploy main branch
 on:
   push:
     branches:
-      - main
       - develop
 
 jobs:
