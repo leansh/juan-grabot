@@ -6,7 +6,7 @@ module.exports.handleMessage = async (event, WHATSAPP_TOKEN) => {
   // to learn about WhatsApp text message payload structure
   let response;
   let body = JSON.parse(event.body)
-  console.log(body);
+  // console.log(event.body);
   let entries = body.entry;
   for (let entry of entries) {
     for (let change of entry.changes) {
