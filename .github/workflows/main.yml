@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     name: deploy
+    environment: prod
     runs-on: ubuntu-latest
     strategy:
       matrix:
