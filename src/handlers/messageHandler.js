@@ -1,4 +1,5 @@
 const https = require("https");
+const http = require("http");
 
 module.exports.handleMessage = async (event, WHATSAPP_TOKEN) => {
   // process POST request (WhatsApp chat messages)
@@ -35,9 +36,10 @@ module.exports.handleMessage = async (event, WHATSAPP_TOKEN) => {
 async function doHandleMessage(message, phone_number_id, WHATSAPP_TOKEN) {
   let from = message.from;
   let message_body = message.text.body;
-  // console.log(from, message_body);
+  console.log(from, message_body);
   // let reply_message = "Ack from AWS lambda: " + message_body;
-  let reply_message = await getReply(message_body);
+  let reply_message = await getReply("Responde en castellano. " + message_body);
+  console.log(reply_message)
   await sendReply(phone_number_id, WHATSAPP_TOKEN, from,
       reply_message);
 }
@@ -64,7 +66,7 @@ const getReply = (prompt) => {
         resolve(str);
       });
     };
-    let req = https.request(options, callback);
+    let req = http.request(options, callback);
 
     req.on("error", (e) => {
       reject(e);
