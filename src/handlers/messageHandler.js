@@ -36,9 +36,42 @@ async function doHandleMessage(message, phone_number_id, WHATSAPP_TOKEN) {
   let from = message.from;
   let message_body = message.text.body;
   // console.log(from, message_body);
-  let reply_message = "Ack from AWS lambda: " + message_body;
+  // let reply_message = "Ack from AWS lambda: " + message_body;
+  let reply_message = await getReply(message_body);
   await sendReply(phone_number_id, WHATSAPP_TOKEN, from,
       reply_message);
+}
+
+const getReply = (prompt) => {
+  return new Promise((resolve, reject) => {
+    let data = JSON.stringify(prompt);
+    let path = "/";
+    let options = {
+      host: "52.0.241.160",
+      port: 8080,
+      path: path,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    let callback = (response) => {
+      let str = "";
+      response.on("data", (chunk) => {
+        str += chunk;
+      });
+      response.on("end", () => {
+        resolve(str);
+      });
+    };
+    let req = https.request(options, callback);
+
+    req.on("error", (e) => {
+      reject(e);
+    });
+    req.write(data);
+    req.end();
+  });
 }
 
 const sendReply = (phone_number_id, whatsapp_token, to, reply_message) => {
@@ -46,10 +79,10 @@ const sendReply = (phone_number_id, whatsapp_token, to, reply_message) => {
     let json = {
       messaging_product: "whatsapp",
       to: to,
-      text: { body: reply_message },
+      text: {body: reply_message},
     };
     let data = JSON.stringify(json);
-    let path = "/v17.0/"+phone_number_id+"/messages";
+    let path = "/v17.0/" + phone_number_id + "/messages";
     let options = {
       host: "graph.facebook.com",
       path: path,
@@ -67,11 +100,14 @@ const sendReply = (phone_number_id, whatsapp_token, to, reply_message) => {
       });
       response.on("end", () => {
         // console.log(str);
+        resolve(str);
       });
     };
     let req = https.request(options, callback);
 
-    req.on("error", (e) => {});
+    req.on("error", (e) => {
+      reject(e);
+    });
     req.write(data);
     req.end();
   });
